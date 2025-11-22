@@ -2,7 +2,14 @@
 
 from .client import YarnGPT
 from .models import Voice, AudioFormat
-from .exceptions import YarnGPTError, AuthenticationError, ValidationError, APIError
+from .exceptions import (
+    YarnGPTError,
+    AuthenticationError,
+    ValidationError,
+    APIError,
+    QuotaExceededError,
+    PaymentRequiredError,
+)
 
 __version__ = "0.1.0"
 __all__ = [
@@ -13,4 +20,6 @@ __all__ = [
     "AuthenticationError",
     "ValidationError",
     "APIError",
+    "QuotaExceededError",
+    "PaymentRequiredError",
 ]

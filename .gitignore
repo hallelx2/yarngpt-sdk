@@ -8,3 +8,22 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Test outputs
+test_*.mp3
+test_*.wav
+test_*.opus
+test_*.flac
+
+# Audio outputs
+*.mp3
+*.wav
+*.opus
+*.flac
+!example_*.mp3
+!example_*.wav

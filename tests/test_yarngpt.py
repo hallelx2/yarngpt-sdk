@@ -120,22 +120,13 @@ class TestExceptions:
             raise ValidationError("Test error")
 
 
-# Integration test marker
-pytestmark = pytest.mark.integration
-
-
 class TestIntegration:
-    """Integration tests (require valid API key)."""
+    """Integration tests (require valid API key from .env)."""
     
-    @pytest.mark.skip(reason="Requires valid API key")
+    @pytest.mark.integration
     def test_real_tts_request(self):
-        """Test real TTS request (requires API key)."""
-        import os
-        api_key = os.getenv("YARNGPT_API_KEY")
-        if not api_key:
-            pytest.skip("YARNGPT_API_KEY not set")
-        
-        with YarnGPT(api_key=api_key) as client:
+        """Test real TTS request with API key from .env file."""
+        with YarnGPT() as client:
             audio = client.text_to_speech(
                 text="Test speech",
                 voice=Voice.IDERA
@@ -143,17 +134,12 @@ class TestIntegration:
             assert isinstance(audio, bytes)
             assert len(audio) > 0
     
-    @pytest.mark.skip(reason="Requires valid API key")
+    @pytest.mark.integration
     def test_save_to_file(self, tmp_path):
-        """Test saving audio to file (requires API key)."""
-        import os
-        api_key = os.getenv("YARNGPT_API_KEY")
-        if not api_key:
-            pytest.skip("YARNGPT_API_KEY not set")
-        
+        """Test saving audio to file with API key from .env file."""
         output_file = tmp_path / "test_output.mp3"
         
-        with YarnGPT(api_key=api_key) as client:
+        with YarnGPT() as client:
             result_path = client.text_to_speech_file(
                 text="Test speech",
                 output_path=output_file,

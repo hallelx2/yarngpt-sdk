@@ -24,6 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "httpx>=0.24.0",
+    "python-decouple>=3.8",
 ]
 
 [project.optional-dependencies]
@@ -67,3 +68,17 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "integration: marks tests as integration tests (require API key)",
+    "unit: marks tests as unit tests (no API calls)",
+]
+env = [
+    "YARNGPT_API_KEY=test_key_for_unit_tests"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=5.0.0",
+]

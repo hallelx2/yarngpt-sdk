@@ -162,25 +162,45 @@ from yarngpt.exceptions import (
     AuthenticationError,
     ValidationError,
     APIError,
+    QuotaExceededError,
+    PaymentRequiredError,
     YarnGPTError
 )
 
-client = YarnGPT(api_key="your_api_key")
+client = YarnGPT()
 
 try:
     audio = client.text_to_speech(
         text="Your text here",
         voice=Voice.IDERA
     )
+except QuotaExceededError as e:
+    print(f"Quota exceeded: {e}")
+    print("Free tier: 80 TTS requests/day")
 except AuthenticationError:
     print("Invalid API key!")
 except ValidationError as e:
     print(f"Invalid parameters: {e}")
+except PaymentRequiredError as e:
+    print(f"Payment required: {e}")
 except APIError as e:
     print(f"API request failed: {e}")
 except YarnGPTError as e:
     print(f"YarnGPT error: {e}")
 ```
+
+### Daily Usage Limits
+
+YarnGPT enforces the following daily limits:
+
+| Resource | Free Tier Limit |
+|----------|----------------|
+| **TTS Requests** | 80/day |
+| Media Processing Jobs | 8/day |
+| URL Extractions | 100/day |
+| Chunked Audio Generations | 120/day |
+
+When you exceed these limits, the SDK will raise a `QuotaExceededError`.
 
 ### Working with Long Text
 
@@ -217,6 +237,7 @@ YarnGPT(api_key: str, base_url: Optional[str] = None, timeout: float = 30.0)
 ```
 
 **Parameters:**
+
 - `api_key` (str): Your YarnGPT API key
 - `base_url` (str, optional): Custom API base URL
 - `timeout` (float, optional): Request timeout in seconds (default: 30)
@@ -236,6 +257,7 @@ client.text_to_speech(
 ```
 
 **Parameters:**
+
 - `text` (str): Text to convert (max 2000 characters)
 - `voice` (Voice | str, optional): Voice to use (default: Idera)
 - `response_format` (AudioFormat | str, optional): Audio format (default: mp3)
@@ -256,6 +278,7 @@ client.text_to_speech_file(
 ```
 
 **Parameters:**
+
 - `text` (str): Text to convert (max 2000 characters)
 - `output_path` (str | Path): Where to save the audio file
 - `voice` (Voice | str, optional): Voice to use (default: Idera)
@@ -278,7 +301,9 @@ Supported audio formats: `MP3`, `WAV`, `OPUS`, `FLAC`
 - `YarnGPTError` - Base exception for all SDK errors
 - `AuthenticationError` - Invalid or missing API key
 - `ValidationError` - Invalid request parameters
-- `APIError` - API request failure
+- `QuotaExceededError` - Daily quota exceeded (80 TTS requests/day on free tier)
+- `PaymentRequiredError` - Payment required to continue
+- `APIError` - General API request failure
 
 ## Development
 
