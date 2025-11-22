@@ -27,4 +27,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configurable timeout and base URL
 - Full type hints for IDE support
 
-[0.1.0]: https://github.com/yarngpt/yarngpt-sdk/releases/tag/v0.1.0
+[0.1.0]: https://github.com/hallelx2/yarngpt-sdk/releases/tag/v0.1.0

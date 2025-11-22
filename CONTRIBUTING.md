@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the YarnGPT SDK!
 
 1. Fork and clone the repository
 ```bash
-git clone https://github.com/your-username/yarngpt-sdk.git
+git clone https://github.com/hallelx2/yarngpt-sdk.git
 cd yarngpt-sdk
 ```
 

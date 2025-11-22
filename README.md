@@ -4,7 +4,9 @@
 [![Python Support](https://img.shields.io/pypi/pyversions/yarngpt-sdk.svg)](https://pypi.org/project/yarngpt-sdk/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official Python SDK for [YarnGPT](https://yarngpt.ai) - A powerful Text-to-Speech API featuring authentic Nigerian accents.
+Unofficial community-built Python SDK for [YarnGPT](https://yarngpt.ai) - A powerful Text-to-Speech API featuring authentic Nigerian accents.
+
+> **Note:** This is a community-maintained SDK and is not officially endorsed by YarnGPT. For official support, please visit [yarngpt.ai](https://yarngpt.ai).
 
 ## Features
 
@@ -318,6 +320,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -327,13 +331,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Website:** [https://yarngpt.ai](https://yarngpt.ai)
 - **API Documentation:** [https://yarngpt.ai/api-docs](https://yarngpt.ai)
 - **Account/API Keys:** [https://yarngpt.ai/account](https://yarngpt.ai/account)
-- **GitHub:** [https://github.com/yarngpt/yarngpt-sdk](https://github.com/yarngpt/yarngpt-sdk)
+- **GitHub:** [https://github.com/hallelx2/yarngpt-sdk](https://github.com/hallelx2/yarngpt-sdk)
 - **PyPI:** [https://pypi.org/project/yarngpt-sdk/](https://pypi.org/project/yarngpt-sdk/)
 
 ## Support
 
-For issues, questions, or contributions, please visit our [GitHub Issues](https://github.com/yarngpt/yarngpt-sdk/issues) page.
+For issues, questions, or contributions, please visit our [GitHub Issues](https://github.com/hallelx2/yarngpt-sdk/issues) page.
 
 ---
+
+**Maintainer:** Halleluyah Darasimi Oludele ([@hallelx2](https://github.com/hallelx2))
+
+*Unofficial community SDK • Not affiliated with YarnGPT*
 
 Made with ❤️ for the Nigerian developer community

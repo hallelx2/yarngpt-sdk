@@ -1,4 +1,4 @@
-"""YarnGPT SDK - Text-to-Speech API for Nigerian Accents."""
+"""YarnGPT SDK - Unofficial community Python SDK for YarnGPT Text-to-Speech API."""
 
 from .client import YarnGPT
 from .models import Voice, AudioFormat

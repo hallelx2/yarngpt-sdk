@@ -1,11 +1,11 @@
 [project]
 name = "yarngpt-sdk"
 version = "0.1.0"
-description = "Official Python SDK for YarnGPT - Text-to-Speech API for Nigerian Accents"
+description = "Unofficial community Python SDK for YarnGPT - Text-to-Speech API for Nigerian Accents"
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
-    { name = "YarnGPT Contributors" }
+    { name = "Halleluyah Darasimi Oludele", email = "halleluyaholudele@gmail.com" }
 ]
 license = { text = "MIT" }
 keywords = ["yarngpt", "text-to-speech", "tts", "nigerian", "accents", "api", "sdk"]
@@ -37,9 +37,9 @@ dev = [
 
 [project.urls]
 Homepage = "https://yarngpt.ai"
-Documentation = "https://github.com/yarngpt/yarngpt-sdk#readme"
-Repository = "https://github.com/yarngpt/yarngpt-sdk"
-Issues = "https://github.com/yarngpt/yarngpt-sdk/issues"
+Documentation = "https://github.com/hallelx2/yarngpt-sdk#readme"
+Repository = "https://github.com/hallelx2/yarngpt-sdk"
+Issues = "https://github.com/hallelx2/yarngpt-sdk/issues"
 
 [build-system]
 requires = ["hatchling"]
