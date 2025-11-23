@@ -21,11 +21,32 @@ Unofficial community-built Python SDK for [YarnGPT](https://yarngpt.ai) - A powe
 
 ## Installation
 
+### Basic Installation
+
 ```bash
 pip install yarngpt-sdk
 ```
 
+### With CLI Support
+
+```bash
+# Install with command-line interface
+pip install yarngpt-sdk[cli]
+```
+
+### Development Installation
+
+```bash
+# Install with development dependencies
+pip install yarngpt-sdk[dev]
+
+# Install everything (CLI + dev tools)
+pip install yarngpt-sdk[cli,dev]
+```
+
 ## Quick Start
+
+### Python API
 
 ```python
 from yarngpt import YarnGPT, Voice, AudioFormat
@@ -45,9 +66,33 @@ with open("output.mp3", "wb") as f:
     f.write(audio)
 ```
 
+### Command-Line Interface
+
+```bash
+# Set your API key
+export YARNGPT_API_KEY="your_api_key_here"
+
+# Convert text to speech
+yarngpt convert "Hello, welcome to Nigeria!"
+
+# Specify voice and format
+yarngpt convert "Good morning!" --voice emma --format wav -o greeting.wav
+
+# Batch convert from a file
+yarngpt batch texts.txt --output-dir audio_files --voice jude
+
+# List all available voices
+yarngpt voices
+
+# Show API information
+yarngpt info
+```
+
 ## Authentication
 
 Get your API key from your [YarnGPT Account Page](https://yarngpt.ai/account).
+
+### Python API
 
 ```python
 from yarngpt import YarnGPT
@@ -58,6 +103,26 @@ client = YarnGPT(api_key="your_api_key")
 # Method 2: Use environment variable
 import os
 client = YarnGPT(api_key=os.getenv("YARNGPT_API_KEY"))
+
+# Method 3: Auto-load from .env file
+# Create .env file with: YARNGPT_API_KEY=your_api_key
+client = YarnGPT()  # Automatically loads from environment
+```
+
+### CLI
+
+```bash
+# Method 1: Set environment variable
+export YARNGPT_API_KEY="your_api_key"  # Linux/Mac
+set YARNGPT_API_KEY=your_api_key       # Windows CMD
+$env:YARNGPT_API_KEY="your_api_key"    # Windows PowerShell
+
+# Method 2: Pass via command line
+yarngpt convert "Hello" --api-key your_api_key
+
+# Method 3: Use .env file
+# Create .env file in your project directory
+echo "YARNGPT_API_KEY=your_api_key" > .env
 ```
 
 ## Available Voices
@@ -226,6 +291,183 @@ else:
     audio = client.text_to_speech(long_text)
 ```
 
+## Command-Line Interface (CLI)
+
+The YarnGPT SDK includes a powerful CLI tool for easy text-to-speech conversion from the terminal.
+
+### Installation
+
+```bash
+pip install yarngpt-sdk[cli]
+```
+
+### CLI Commands
+
+#### `yarngpt convert`
+
+Convert text to speech and save to a file.
+
+```bash
+# Basic usage
+yarngpt convert "Hello, welcome to Nigeria!"
+
+# Custom output file
+yarngpt convert "Good morning" -o greeting.mp3
+
+# Specify voice
+yarngpt convert "Test message" --voice emma
+
+# Specify format
+yarngpt convert "High quality" --format wav -o output.wav
+
+# All options
+yarngpt convert "Complete example" \
+  --output audio.mp3 \
+  --voice jude \
+  --format mp3 \
+  --api-key your_key
+```
+
+**Options:**
+- `-o, --output PATH` - Output file path (default: output.mp3)
+- `-v, --voice TEXT` - Voice name (default: idera)
+- `-f, --format TEXT` - Audio format: mp3, wav, opus, flac (default: mp3)
+- `-k, --api-key TEXT` - YarnGPT API key (or use YARNGPT_API_KEY env var)
+
+#### `yarngpt batch`
+
+Batch convert multiple texts from a file.
+
+```bash
+# Create a text file with one text per line
+cat > texts.txt << EOF
+Hello, welcome!
+How are you today?
+Thank you very much!
+EOF
+
+# Batch convert
+yarngpt batch texts.txt
+
+# Custom output directory and prefix
+yarngpt batch texts.txt -o audio_files --prefix speech
+
+# With specific voice and format
+yarngpt batch texts.txt --voice emma --format wav
+```
+
+**Options:**
+- `-o, --output-dir PATH` - Output directory (default: output)
+- `-v, --voice TEXT` - Voice for all files (default: idera)
+- `-f, --format TEXT` - Audio format for all files (default: mp3)
+- `-p, --prefix TEXT` - Filename prefix (default: audio)
+- `-k, --api-key TEXT` - YarnGPT API key
+
+**Input Formats:**
+
+Text file (one per line):
+```text
+First text to convert
+Second text to convert
+Third text to convert
+```
+
+JSON file (array of strings):
+```json
+[
+  "First text to convert",
+  "Second text to convert",
+  "Third text to convert"
+]
+```
+
+#### `yarngpt voices`
+
+List all available voices with descriptions.
+
+```bash
+yarngpt voices
+```
+
+Output:
+```
+┌────────────┬────────────┬──────────────────────────┐
+│ Name       │ Value      │ Description              │
+├────────────┼────────────┼──────────────────────────┤
+│ IDERA      │ Idera      │ Melodic and gentle voice │
+│ EMMA       │ Emma       │ Authoritative and deep   │
+│ ...        │ ...        │ ...                      │
+└────────────┴────────────┴──────────────────────────┘
+```
+
+#### `yarngpt formats`
+
+List all supported audio formats.
+
+```bash
+yarngpt formats
+```
+
+#### `yarngpt info`
+
+Show API information, limits, and helpful links.
+
+```bash
+yarngpt info
+```
+
+Output shows:
+- Free tier limits
+- Available features
+- Useful links
+- Getting started guide
+
+#### `yarngpt version`
+
+Show the SDK version.
+
+```bash
+yarngpt version
+```
+
+### CLI Examples
+
+**Convert with Nigerian accent:**
+```bash
+yarngpt convert "Welcome to Lagos!" --voice tayo -o lagos.mp3
+```
+
+**Create multiple greetings:**
+```bash
+cat > greetings.txt << EOF
+Good morning, have a great day!
+Good afternoon, hope you're doing well!
+Good evening, time to relax!
+EOF
+
+yarngpt batch greetings.txt -o greetings --prefix greeting --voice regina
+# Creates: greetings/greeting_0.mp3, greetings/greeting_1.mp3, ...
+```
+
+**High-quality WAV output:**
+```bash
+yarngpt convert "Professional audio message" \
+  --voice adam \
+  --format wav \
+  -o professional.wav
+```
+
+**Quick voice testing:**
+```bash
+# List all voices
+yarngpt voices
+
+# Test different voices
+yarngpt convert "Testing Idera voice" --voice idera -o test_idera.mp3
+yarngpt convert "Testing Emma voice" --voice emma -o test_emma.mp3
+yarngpt convert "Testing Jude voice" --voice jude -o test_jude.mp3
+```
+
 ## API Reference
 
 ### `YarnGPT`
@@ -353,6 +595,20 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Roadmap
+
+We have exciting features planned for future releases! See our [ROADMAP.md](ROADMAP.md) for details on:
+
+- 🔄 **Async Support** - AsyncYarnGPT for concurrent applications
+- 🔁 **Retry Logic** - Automatic retry with exponential backoff
+- 💾 **Caching** - Optional caching to reduce API calls
+- 🎵 **Audio Utilities** - Audio processing, validation, and concatenation
+- 📊 **Usage Analytics** - Track and export usage statistics
+- 🧪 **Mock Client** - Testing without API calls
+- And much more!
+
+See the full [roadmap](ROADMAP.md) for planned features and timelines.
+
 ## Links
 
 - **Website:** [https://yarngpt.ai](https://yarngpt.ai)
@@ -360,6 +616,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Account/API Keys:** [https://yarngpt.ai/account](https://yarngpt.ai/account)
 - **GitHub:** [https://github.com/hallelx2/yarngpt-sdk](https://github.com/hallelx2/yarngpt-sdk)
 - **PyPI:** [https://pypi.org/project/yarngpt-sdk/](https://pypi.org/project/yarngpt-sdk/)
+- **Roadmap:** [ROADMAP.md](https://github.com/hallelx2/yarngpt-sdk/blob/master/ROADMAP.md)
 
 ## Support
 

@@ -25,9 +25,15 @@ classifiers = [
 dependencies = [
     "httpx>=0.24.0",
     "python-decouple>=3.8",
+    "rich>=14.2.0",
+    "typer>=0.20.0",
 ]
 
 [project.optional-dependencies]
+cli = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -41,6 +47,10 @@ Homepage = "https://yarngpt.ai"
 Documentation = "https://github.com/hallelx2/yarngpt-sdk#readme"
 Repository = "https://github.com/hallelx2/yarngpt-sdk"
 Issues = "https://github.com/hallelx2/yarngpt-sdk/issues"
+Roadmap = "https://github.com/hallelx2/yarngpt-sdk/blob/master/ROADMAP.md"
+
+[project.scripts]
+yarngpt = "yarngpt.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -83,4 +93,5 @@ dev = [
     "pytest-cov>=5.0.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
+    "pytest-asyncio>=0.24.0",
 ]
