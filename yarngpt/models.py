@@ -5,7 +5,7 @@ from enum import Enum
 
 class Voice(str, Enum):
     """Available voice characters for text-to-speech conversion."""
-    
+
     IDERA = "Idera"  # Melodic, gentle
     EMMA = "Emma"  # Authoritative, deep
     ZAINAB = "Zainab"  # Soothing, gentle
@@ -22,7 +22,7 @@ class Voice(str, Enum):
     NONSO = "Nonso"  # Bold, resonant
     REMI = "Remi"  # Melodious, warm
     ADAM = "Adam"  # Deep, clear
-    
+
     @property
     def description(self) -> str:
         """Get the voice description."""
@@ -49,7 +49,7 @@ class Voice(str, Enum):
 
 class AudioFormat(str, Enum):
     """Supported audio output formats."""
-    
+
     MP3 = "mp3"
     WAV = "wav"
     OPUS = "opus"
