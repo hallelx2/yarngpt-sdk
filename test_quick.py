@@ -3,7 +3,7 @@ Quick test script for YarnGPT SDK
 Tests basic functionality with minimal API calls
 """
 
-from yarngpt import YarnGPT, Voice, AudioFormat
+from yarngpt import YarnGPT, Voice
 from yarngpt.exceptions import YarnGPTError
 
 def test_basic_tts():

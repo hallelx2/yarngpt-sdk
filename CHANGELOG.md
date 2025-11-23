@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-11-22
 
 ### Added
+
 - Initial release of YarnGPT SDK
 - Support for 16 Nigerian accent voices
 - Text-to-speech conversion with multiple audio formats (MP3, WAV, OPUS, FLAC)
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License
 
 ### Features
+
 - Synchronous HTTP client using httpx
 - Maximum text length validation (2000 characters)
 - Bearer token authentication

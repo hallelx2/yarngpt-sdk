@@ -5,12 +5,14 @@ Thank you for your interest in contributing to the YarnGPT SDK!
 ## Development Setup
 
 1. Fork and clone the repository
+
 ```bash
 git clone https://github.com/hallelx2/yarngpt-sdk.git
 cd yarngpt-sdk
 ```
 
 2. Create a virtual environment
+
 ```bash
 python -m venv .venv
 .venv\Scripts\activate  # Windows
@@ -18,6 +20,7 @@ source .venv/bin/activate  # Linux/Mac
 ```
 
 3. Install development dependencies
+
 ```bash
 pip install -e ".[dev]"
 ```

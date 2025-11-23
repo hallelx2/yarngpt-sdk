@@ -7,16 +7,19 @@ This directory contains example scripts demonstrating how to use the YarnGPT SDK
 First, set your API key as an environment variable:
 
 ### Windows (PowerShell)
+
 ```powershell
 $env:YARNGPT_API_KEY="your_api_key_here"
 ```
 
 ### Windows (CMD)
+
 ```cmd
 set YARNGPT_API_KEY=your_api_key_here
 ```
 
 ### Linux/Mac
+
 ```bash
 export YARNGPT_API_KEY="your_api_key_here"
 ```
