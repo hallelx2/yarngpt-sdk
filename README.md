@@ -291,6 +291,380 @@ else:
     audio = client.text_to_speech(long_text)
 ```
 
+## Async Support
+
+The SDK provides full async/await support through the `AsyncYarnGPT` client for high-performance, concurrent operations. Perfect for web applications, batch processing, and high-volume TTS generation.
+
+### Basic Async Usage
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice, AudioFormat
+
+async def generate_speech():
+    async with AsyncYarnGPT(api_key="your_api_key") as client:
+        audio = await client.text_to_speech(
+            text="Hello from async client!",
+            voice=Voice.IDERA,
+            response_format=AudioFormat.MP3,
+        )
+        
+        # Save to file
+        with open("output.mp3", "wb") as f:
+            f.write(audio)
+        
+        print(f"Generated {len(audio):,} bytes")
+
+# Run the async function
+asyncio.run(generate_speech())
+```
+
+### Async File Operations
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice
+
+async def save_to_file():
+    async with AsyncYarnGPT() as client:
+        path = await client.text_to_speech_file(
+            text="Async file save example",
+            output_path="async_output.mp3",
+            voice=Voice.EMMA,
+        )
+        print(f"Saved to {path}")
+
+asyncio.run(save_to_file())
+```
+
+### Concurrent Batch Processing
+
+The async client shines when processing multiple texts concurrently:
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice
+
+async def batch_concurrent():
+    texts = [
+        "First message",
+        "Second message",
+        "Third message",
+        "Fourth message",
+    ]
+    
+    async with AsyncYarnGPT() as client:
+        # Process all texts concurrently (much faster!)
+        audios = await client.batch_text_to_speech(
+            texts=texts,
+            voice=Voice.JUDE,
+            concurrent=True,  # Enable concurrent processing
+        )
+        
+        print(f"Generated {len(audios)} audio files concurrently!")
+        
+        # Save all files
+        for i, audio in enumerate(audios):
+            with open(f"batch_{i}.mp3", "wb") as f:
+                f.write(audio)
+
+asyncio.run(batch_concurrent())
+```
+
+### Concurrent vs Sequential Comparison
+
+```python
+import asyncio
+import time
+from yarngpt import AsyncYarnGPT
+
+async def compare_performance():
+    texts = ["Text 1", "Text 2", "Text 3", "Text 4", "Text 5"]
+    
+    async with AsyncYarnGPT() as client:
+        # Sequential processing
+        start = time.time()
+        audios_seq = await client.batch_text_to_speech(
+            texts=texts,
+            concurrent=False,
+        )
+        seq_time = time.time() - start
+        
+        # Concurrent processing
+        start = time.time()
+        audios_con = await client.batch_text_to_speech(
+            texts=texts,
+            concurrent=True,
+        )
+        con_time = time.time() - start
+        
+        print(f"Sequential: {seq_time:.2f}s")
+        print(f"Concurrent: {con_time:.2f}s")
+        print(f"Speed up: {seq_time/con_time:.2f}x faster!")
+
+asyncio.run(compare_performance())
+```
+
+### Async Batch to Files
+
+```python
+import asyncio
+from pathlib import Path
+from yarngpt import AsyncYarnGPT, Voice, AudioFormat
+
+async def batch_to_files():
+    texts = [
+        "Welcome to our service",
+        "Thank you for calling",
+        "Please hold",
+    ]
+    
+    async with AsyncYarnGPT() as client:
+        paths = await client.batch_text_to_speech_files(
+            texts=texts,
+            output_dir="audio_output",
+            filename_prefix="message",
+            voice=Voice.REGINA,
+            response_format=AudioFormat.MP3,
+            concurrent=True,
+        )
+        
+        print("Generated files:")
+        for path in paths:
+            print(f"  • {path}")
+
+asyncio.run(batch_to_files())
+```
+
+### Custom Retry Configuration (Async)
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, RetryConfig
+
+async def with_custom_retry():
+    retry_config = RetryConfig(
+        max_retries=5,
+        backoff_factor=2.0,
+        max_backoff=60.0,
+        jitter=True,
+    )
+    
+    async with AsyncYarnGPT(retry_config=retry_config) as client:
+        audio = await client.text_to_speech(
+            text="Text with custom retry logic"
+        )
+        print(f"Generated with retry config: {len(audio):,} bytes")
+
+asyncio.run(with_custom_retry())
+```
+
+### Async with Multiple Voices (Concurrent)
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice
+
+async def test_multiple_voices():
+    async with AsyncYarnGPT() as client:
+        # Process different voices concurrently
+        tasks = [
+            client.text_to_speech("Testing Idera", voice=Voice.IDERA),
+            client.text_to_speech("Testing Emma", voice=Voice.EMMA),
+            client.text_to_speech("Testing Jude", voice=Voice.JUDE),
+            client.text_to_speech("Testing Zainab", voice=Voice.ZAINAB),
+        ]
+        
+        audios = await asyncio.gather(*tasks)
+        
+        voices = [Voice.IDERA, Voice.EMMA, Voice.JUDE, Voice.ZAINAB]
+        for voice, audio in zip(voices, audios):
+            print(f"{voice.value}: {len(audio):,} bytes")
+
+asyncio.run(test_multiple_voices())
+```
+
+### Async Error Handling
+
+The async client includes robust error handling with automatic retries for transient failures:
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice
+from yarngpt.exceptions import (
+    ValidationError,
+    QuotaExceededError,
+    AuthenticationError,
+    APIError,
+)
+
+async def handle_errors():
+    async with AsyncYarnGPT() as client:
+        try:
+            # This will succeed
+            audio = await client.text_to_speech(
+                text="Valid text",
+                voice=Voice.IDERA,
+            )
+            print(f"✅ Success: {len(audio):,} bytes")
+            
+        except ValidationError as e:
+            print(f"❌ Validation Error: {e}")
+            # Handle invalid input (empty text, text too long, etc.)
+            
+        except QuotaExceededError as e:
+            print(f"❌ Quota Exceeded: {e}")
+            # Handle daily limit reached (80 requests/day for free tier)
+            
+        except AuthenticationError as e:
+            print(f"❌ Auth Error: {e}")
+            # Handle invalid API key
+            
+        except APIError as e:
+            print(f"❌ API Error: {e}")
+            # Handle other API errors (500, 502, 503, etc.)
+            # These are automatically retried with exponential backoff
+
+asyncio.run(handle_errors())
+```
+
+### Graceful Error Handling in Batch Operations
+
+When processing multiple items concurrently, some may fail while others succeed:
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, Voice
+from yarngpt.exceptions import YarnGPTError
+
+async def batch_with_error_handling():
+    texts = [
+        "Valid text 1",
+        "",  # This will fail (empty)
+        "Valid text 2",
+        "a" * 3000,  # This will fail (too long)
+        "Valid text 3",
+    ]
+    
+    async with AsyncYarnGPT() as client:
+        results = []
+        
+        for i, text in enumerate(texts):
+            try:
+                audio = await client.text_to_speech(text, voice=Voice.EMMA)
+                results.append((i, audio, None))
+                print(f"✅ Text {i}: {len(audio):,} bytes")
+            except YarnGPTError as e:
+                results.append((i, None, str(e)))
+                print(f"❌ Text {i}: {e}")
+        
+        # Process successful results
+        successful = [(i, audio) for i, audio, error in results if error is None]
+        failed = [(i, error) for i, audio, error in results if error is not None]
+        
+        print(f"\n📊 Results: {len(successful)} succeeded, {len(failed)} failed")
+
+asyncio.run(batch_with_error_handling())
+
+async def safe_batch_processing():
+    texts = ["Text 1", "Text 2", "Text 3"]
+    
+    async with AsyncYarnGPT() as client:
+        tasks = [
+            client.text_to_speech(text=text, voice=Voice.IDERA)
+            for text in texts
+        ]
+        
+        # Use return_exceptions=True to handle partial failures
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                print(f"Text {i+1} failed: {type(result).__name__}")
+            else:
+                print(f"Text {i+1} succeeded: {len(result):,} bytes")
+
+asyncio.run(safe_batch_processing())
+```
+
+**Tip:** Use `asyncio.gather(*tasks, return_exceptions=True)` for graceful handling of partial failures in batch operations.
+
+### Integration with Web Frameworks
+
+#### FastAPI Example
+
+```python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from yarngpt import AsyncYarnGPT, Voice
+
+app = FastAPI()
+client = AsyncYarnGPT()
+
+class TTSRequest(BaseModel):
+    text: str
+    voice: str = "idera"
+
+@app.post("/tts")
+async def generate_tts(request: TTSRequest):
+    try:
+        async with client:
+            audio = await client.text_to_speech(
+                text=request.text,
+                voice=Voice[request.voice.upper()],
+            )
+            return {"size": len(audio), "status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+#### Django Async View Example
+
+```python
+from django.http import JsonResponse
+from yarngpt import AsyncYarnGPT, Voice
+
+async def tts_view(request):
+    text = request.GET.get('text', '')
+    voice = request.GET.get('voice', 'idera')
+    
+    async with AsyncYarnGPT() as client:
+        audio = await client.text_to_speech(
+            text=text,
+            voice=Voice[voice.upper()],
+        )
+        
+        return JsonResponse({
+            'size': len(audio),
+            'status': 'success'
+        })
+```
+
+### Performance Tips for Async
+
+1. **Use Concurrent Processing**: Always set `concurrent=True` for batch operations
+2. **Context Manager**: Use `async with` to ensure proper cleanup
+3. **Connection Pooling**: AsyncYarnGPT reuses HTTP connections efficiently
+4. **Gather Tasks**: Use `asyncio.gather()` for maximum concurrency
+5. **Error Handling**: Wrap async calls in try-except for robust error handling
+
+```python
+import asyncio
+from yarngpt import AsyncYarnGPT, YarnGPTError
+
+async def robust_async_tts():
+    async with AsyncYarnGPT() as client:
+        try:
+            audio = await client.text_to_speech("Your text here")
+            return audio
+        except YarnGPTError as e:
+            print(f"Error: {e}")
+            return None
+
+# Run with proper error handling
+result = asyncio.run(robust_async_tts())
+```
+
 ## Command-Line Interface (CLI)
 
 The YarnGPT SDK includes a powerful CLI tool for easy text-to-speech conversion from the terminal.
