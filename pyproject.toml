@@ -1,6 +1,6 @@
 [project]
 name = "yarngpt-sdk"
-version = "0.1.0"
+version = "0.2.0"
 description = "Unofficial community Python SDK for YarnGPT - Text-to-Speech API for Nigerian Accents"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -47,7 +47,7 @@ Homepage = "https://yarngpt.ai"
 Documentation = "https://github.com/hallelx2/yarngpt-sdk#readme"
 Repository = "https://github.com/hallelx2/yarngpt-sdk"
 Issues = "https://github.com/hallelx2/yarngpt-sdk/issues"
-Roadmap = "https://github.com/hallelx2/yarngpt-sdk/blob/master/ROADMAP.md"
+Changelog = "https://github.com/hallelx2/yarngpt-sdk/blob/master/CHANGELOG.md"
 
 [project.scripts]
 yarngpt = "yarngpt.cli:main"
