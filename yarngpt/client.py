@@ -86,7 +86,7 @@ class YarnGPT:
             f"{self.base_url}/tts",
             json=payload,
         )
-        
+
         # Handle response
         if response.status_code == 401:
             raise AuthenticationError("Invalid API key")
@@ -115,16 +115,14 @@ class YarnGPT:
                 "Payment required. Please check your account balance or subscription."
             )
         elif response.status_code == 403:
-            raise AuthenticationError(
-                "Access forbidden. Please check your API key permissions."
-            )
+            raise AuthenticationError("Access forbidden. Please check your API key permissions.")
         elif response.status_code != 200:
             raise APIError(
                 f"API request failed with status {response.status_code}: {response.text}"
             )
-        
+
         return response.content
-    
+
     def text_to_speech(
         self,
         text: str,

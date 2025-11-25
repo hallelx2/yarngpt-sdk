@@ -1,16 +1,15 @@
 """Command-line interface for YarnGPT SDK."""
 
-import sys
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional
 import typer
+from typer.core import TyperGroup
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.panel import Panel
 from rich.text import Text
 from rich.align import Align
-from rich import print as rprint
 
 from yarngpt import YarnGPT, Voice, AudioFormat
 from yarngpt.exceptions import (
@@ -32,12 +31,10 @@ BANNER = """
 
 TAGLINE = "Nigerian Accent Text-to-Speech - Authentic Voices, Powered by AI"
 
-from typer.core import TyperGroup
-
 
 class BannerGroup(TyperGroup):
     """Custom Typer group that shows banner before help output."""
-    
+
     def format_help(self, ctx, formatter):
         # Show banner before help
         show_banner()
@@ -57,22 +54,22 @@ console = Console()
 def show_banner():
     """Display the styled ASCII art banner with Nigerian flag colors (Green-White-Green)."""
     banner_lines = BANNER.strip().split("\n")
-    
+
     # Nigerian flag gradient: Green -> White -> Green
     # Using rich color names that blend smoothly
     colors = [
-        "green",           # Top - Green
-        "bright_green",    # 
-        "white",           # Middle - White
-        "bright_green",    # 
-        "green",           # Bottom - Green
+        "green",  # Top - Green
+        "bright_green",  #
+        "white",  # Middle - White
+        "bright_green",  #
+        "green",  # Bottom - Green
     ]
-    
+
     styled_banner = Text()
     for i, line in enumerate(banner_lines):
         color = colors[i % len(colors)]
         styled_banner.append(line + "\n", style=f"bold {color}")
-    
+
     console.print(Align.center(styled_banner))
     console.print(Align.center(Text(TAGLINE, style="italic bright_yellow")))
     console.print()
@@ -166,9 +163,7 @@ def convert(
         with open(output, "wb") as f:
             f.write(audio)
 
-        console.print(
-            f"\n✅ [green]Success![/green] Audio saved to: [cyan]{output}[/cyan]"
-        )
+        console.print(f"\n✅ [green]Success![/green] Audio saved to: [cyan]{output}[/cyan]")
         console.print(f"   Size: {len(audio):,} bytes")
         console.print(f"   Voice: {voice_enum.value}")
         console.print(f"   Format: {format_enum.value}")
@@ -281,9 +276,7 @@ def batch(
 
         # Process batch
         with Progress(console=console) as progress:
-            task = progress.add_task(
-                "[cyan]Converting...", total=len(texts)
-            )
+            task = progress.add_task("[cyan]Converting...", total=len(texts))
 
             paths = client.batch_text_to_speech_files(
                 texts=texts,
@@ -316,7 +309,9 @@ def batch(
 @app.command()
 def voices():
     """List all available voices with descriptions."""
-    table = Table(title="🎤 Available YarnGPT Voices", show_header=True, header_style="bold magenta")
+    table = Table(
+        title="🎤 Available YarnGPT Voices", show_header=True, header_style="bold magenta"
+    )
     table.add_column("Name", style="cyan", width=12)
     table.add_column("Value", style="green", width=12)
     table.add_column("Description", style="white")
@@ -349,7 +344,7 @@ def voices():
         )
 
     console.print(table)
-    console.print("\n💡 Usage: [cyan]yarngpt convert \"Hello\" --voice idera[/cyan]")
+    console.print('\n💡 Usage: [cyan]yarngpt convert "Hello" --voice idera[/cyan]')
 
 
 @app.command()
@@ -371,13 +366,14 @@ def formats():
         table.add_row(fmt.value, ext, desc)
 
     console.print(table)
-    console.print("\n💡 Usage: [cyan]yarngpt convert \"Hello\" --format wav[/cyan]")
+    console.print('\n💡 Usage: [cyan]yarngpt convert "Hello" --format wav[/cyan]')
 
 
 @app.command()
 def version():
     """Show the SDK version."""
     from yarngpt import __version__
+
     console.print(f"YarnGPT SDK version: [cyan]{__version__}[/cyan]")
 
 
@@ -386,13 +382,13 @@ def main_callback(ctx: typer.Context):
     """Main callback to show banner when no command is provided."""
     if ctx.invoked_subcommand is None:
         show_banner()
-        
+
         # Create welcome panel
         welcome_text = Text()
         welcome_text.append("Welcome to ", style="white")
         welcome_text.append("YarnGPT CLI", style="bold green")
         welcome_text.append("\nAuthentic Nigerian Accent Text-to-Speech", style="italic dim")
-        
+
         welcome_panel = Panel(
             welcome_text,
             title="[bold green]🎤 YarnGPT[/bold green]",
@@ -401,7 +397,7 @@ def main_callback(ctx: typer.Context):
         )
         console.print(welcome_panel)
         console.print()
-        
+
         # Command table
         table = Table(
             title="[bold green]Available Commands[/bold green]",
@@ -411,23 +407,23 @@ def main_callback(ctx: typer.Context):
         table.add_column("Command", style="green", no_wrap=True)
         table.add_column("Description", style="white")
         table.add_column("Example", style="dim")
-        
+
         table.add_row("convert", "Convert text to speech", 'yarngpt convert "Hello Nigeria!"')
         table.add_row("batch", "Batch convert from file", "yarngpt batch texts.txt")
         table.add_row("voices", "List available voices", "yarngpt voices")
         table.add_row("formats", "List audio formats", "yarngpt formats")
         table.add_row("info", "Show API limits", "yarngpt info")
         table.add_row("version", "Show SDK version", "yarngpt version")
-        
+
         console.print(table)
         console.print()
-        
+
         # Quick tips
         tips_panel = Panel(
             "[bold yellow]Quick Tips:[/bold yellow]\n"
             "• [bold green]🔑 Setup:[/bold green] export YARNGPT_API_KEY=your_key\n"
             "• [bold green]🎙️ Try Voices:[/bold green] yarngpt voices\n"
-            "• [bold green]📝 Convert:[/bold green] yarngpt convert \"Your text\" -o output.mp3\n"
+            '• [bold green]📝 Convert:[/bold green] yarngpt convert "Your text" -o output.mp3\n'
             "• [bold green]📚 Batch:[/bold green] yarngpt batch texts.txt --voice emma\n"
             "• [bold green]❓ Help:[/bold green] yarngpt --help or yarngpt <command> --help",
             title="[bold yellow]💡 Getting Started[/bold yellow]",
@@ -463,7 +459,7 @@ def info():
     console.print("💡 [bold]Get Started:[/bold]")
     console.print("   1. Get API key: https://yarngpt.ai/account")
     console.print("   2. Set environment variable: YARNGPT_API_KEY=your_key")
-    console.print("   3. Run: yarngpt convert \"Hello, Nigeria!\"")
+    console.print('   3. Run: yarngpt convert "Hello, Nigeria!"')
 
 
 def main():

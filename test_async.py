@@ -1,7 +1,6 @@
 """Test script for AsyncYarnGPT client."""
+
 import asyncio
-import os
-from pathlib import Path
 from yarngpt import AsyncYarnGPT, Voice, AudioFormat, RetryConfig
 
 
@@ -15,7 +14,7 @@ async def test_async_basic():
             response_format=AudioFormat.MP3,
         )
         print(f"✅ Generated audio: {len(audio):,} bytes")
-        
+
         # Save to file
         with open("async_test_basic.mp3", "wb") as f:
             f.write(audio)
@@ -38,50 +37,52 @@ async def test_async_batch_sequential():
     """Test async batch processing (sequential)."""
     print("\n🧪 Test 3: Async batch processing (sequential)")
     texts = ["First text", "Second text", "Third text"]
-    
+
     async with AsyncYarnGPT() as client:
         import time
+
         start = time.time()
-        
+
         audios = await client.batch_text_to_speech(
             texts=texts,
             voice=Voice.JUDE,
             concurrent=False,
         )
-        
+
         elapsed = time.time() - start
         print(f"✅ Generated {len(audios)} audio files in {elapsed:.2f}s (sequential)")
         for i, audio in enumerate(audios):
-            print(f"   • Audio {i+1}: {len(audio):,} bytes")
+            print(f"   • Audio {i + 1}: {len(audio):,} bytes")
 
 
 async def test_async_batch_concurrent():
     """Test async batch processing (concurrent)."""
     print("\n🧪 Test 4: Async batch processing (concurrent)")
     texts = ["First text", "Second text", "Third text"]
-    
+
     async with AsyncYarnGPT() as client:
         import time
+
         start = time.time()
-        
+
         audios = await client.batch_text_to_speech(
             texts=texts,
             voice=Voice.JUDE,
             concurrent=True,
         )
-        
+
         elapsed = time.time() - start
         print(f"✅ Generated {len(audios)} audio files in {elapsed:.2f}s (concurrent)")
-        print(f"   🚀 Much faster with concurrent processing!")
+        print("   🚀 Much faster with concurrent processing!")
         for i, audio in enumerate(audios):
-            print(f"   • Audio {i+1}: {len(audio):,} bytes")
+            print(f"   • Audio {i + 1}: {len(audio):,} bytes")
 
 
 async def test_async_batch_files():
     """Test async batch processing with files."""
     print("\n🧪 Test 5: Async batch to files (concurrent)")
     texts = ["Welcome to async", "This is concurrent", "Processing multiple texts"]
-    
+
     async with AsyncYarnGPT() as client:
         paths = await client.batch_text_to_speech_files(
             texts=texts,
@@ -91,7 +92,7 @@ async def test_async_batch_files():
             response_format=AudioFormat.MP3,
             concurrent=True,
         )
-        
+
         print(f"✅ Generated {len(paths)} files:")
         for path in paths:
             print(f"   • {path.name}")
@@ -105,7 +106,7 @@ async def test_async_custom_retry():
         backoff_factor=2.0,
         jitter=True,
     )
-    
+
     async with AsyncYarnGPT(retry_config=retry_config) as client:
         audio = await client.text_to_speech(
             text="Testing with custom retry configuration",
@@ -117,20 +118,17 @@ async def test_async_custom_retry():
 async def test_async_different_voices():
     """Test async with different voices."""
     print("\n🧪 Test 7: Async with multiple voices")
-    
+
     voice_tests = [
         (Voice.IDERA, "Testing Idera voice"),
         (Voice.EMMA, "Testing Emma voice"),
         (Voice.JUDE, "Testing Jude voice"),
         (Voice.ZAINAB, "Testing Zainab voice"),
     ]
-    
+
     async with AsyncYarnGPT() as client:
-        tasks = [
-            client.text_to_speech(text=text, voice=voice)
-            for voice, text in voice_tests
-        ]
-        
+        tasks = [client.text_to_speech(text=text, voice=voice) for voice, text in voice_tests]
+
         audios = await asyncio.gather(*tasks)
         print(f"✅ Generated {len(audios)} voices concurrently:")
         for (voice, _), audio in zip(voice_tests, audios):
@@ -140,22 +138,21 @@ async def test_async_different_voices():
 async def test_async_different_formats():
     """Test async with different audio formats."""
     print("\n🧪 Test 8: Async with multiple formats")
-    
+
     format_tests = [
         (AudioFormat.MP3, "MP3 format test"),
         (AudioFormat.WAV, "WAV format test"),
         (AudioFormat.OPUS, "OPUS format test"),
     ]
-    
+
     try:
         async with AsyncYarnGPT() as client:
             tasks = [
-                client.text_to_speech(text=text, response_format=fmt)
-                for fmt, text in format_tests
+                client.text_to_speech(text=text, response_format=fmt) for fmt, text in format_tests
             ]
-            
+
             audios = await asyncio.gather(*tasks, return_exceptions=True)
-            
+
             success_count = 0
             for (fmt, _), result in zip(format_tests, audios):
                 if isinstance(result, Exception):
@@ -163,7 +160,7 @@ async def test_async_different_formats():
                 else:
                     print(f"   • {fmt.value}: {len(result):,} bytes")
                     success_count += 1
-            
+
             if success_count > 0:
                 print(f"✅ Generated {success_count}/{len(format_tests)} formats successfully")
             else:
@@ -178,7 +175,7 @@ async def main():
     print("=" * 60)
     print("🚀 AsyncYarnGPT Client Test Suite")
     print("=" * 60)
-    
+
     tests = [
         ("Basic async text-to-speech", test_async_basic),
         ("Async file saving", test_async_file),
@@ -189,10 +186,10 @@ async def main():
         ("Multiple voices", test_async_different_voices),
         ("Multiple formats", test_async_different_formats),
     ]
-    
+
     passed = 0
     failed = 0
-    
+
     for test_name, test_func in tests:
         try:
             await test_func()
@@ -200,13 +197,13 @@ async def main():
         except Exception as e:
             failed += 1
             print(f"\n❌ {test_name} failed: {type(e).__name__}: {e}")
-    
+
     print("\n" + "=" * 60)
     print(f"📊 Test Results: {passed} passed, {failed} failed")
     if failed == 0:
         print("✅ All async tests completed successfully!")
     else:
-        print(f"⚠️  Some tests failed (may be API limitations)")
+        print("⚠️  Some tests failed (may be API limitations)")
     print("=" * 60)
 
 
