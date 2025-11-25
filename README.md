@@ -1,12 +1,16 @@
+<div align="center">
+  <img src="yarngpt.png" alt="YarnGPT SDK" width="200"/>
+  
 # YarnGPT Python SDK
 
-[![Tests](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/test.yml/badge.svg)](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/test.yml)
-[![Code Quality](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/lint.yml/badge.svg)](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/lint.yml)
-[![PyPI version](https://badge.fury.io/py/yarngpt-sdk.svg)](https://badge.fury.io/py/yarngpt-sdk)
-[![Python Support](https://img.shields.io/pypi/pyversions/yarngpt-sdk.svg)](https://pypi.org/project/yarngpt-sdk/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Tests](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/test.yml/badge.svg)](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/test.yml)
+  [![Code Quality](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/lint.yml/badge.svg)](https://github.com/hallelx2/yarngpt-sdk/actions/workflows/lint.yml)
+  [![PyPI version](https://badge.fury.io/py/yarngpt-sdk.svg)](https://badge.fury.io/py/yarngpt-sdk)
+  [![Python Support](https://img.shields.io/pypi/pyversions/yarngpt-sdk.svg)](https://pypi.org/project/yarngpt-sdk/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Unofficial community-built Python SDK for [YarnGPT](https://yarngpt.ai) - A powerful Text-to-Speech API featuring authentic Nigerian accents.
+  Unofficial community-built Python SDK for [YarnGPT](https://yarngpt.ai) - A powerful Text-to-Speech API featuring authentic Nigerian accents.
+</div>
 
 > **Note:** This is a community-maintained SDK and is not officially endorsed by YarnGPT. For official support, please visit [yarngpt.ai](https://yarngpt.ai).
 
@@ -703,6 +707,7 @@ yarngpt convert "Complete example" \
 ```
 
 **Options:**
+
 - `-o, --output PATH` - Output file path (default: output.mp3)
 - `-v, --voice TEXT` - Voice name (default: idera)
 - `-f, --format TEXT` - Audio format: mp3, wav, opus, flac (default: mp3)
@@ -731,6 +736,7 @@ yarngpt batch texts.txt --voice emma --format wav
 ```
 
 **Options:**
+
 - `-o, --output-dir PATH` - Output directory (default: output)
 - `-v, --voice TEXT` - Voice for all files (default: idera)
 - `-f, --format TEXT` - Audio format for all files (default: mp3)
@@ -740,6 +746,7 @@ yarngpt batch texts.txt --voice emma --format wav
 **Input Formats:**
 
 Text file (one per line):
+
 ```text
 First text to convert
 Second text to convert
@@ -747,6 +754,7 @@ Third text to convert
 ```
 
 JSON file (array of strings):
+
 ```json
 [
   "First text to convert",
@@ -764,6 +772,7 @@ yarngpt voices
 ```
 
 Output:
+
 ```
 ┌────────────┬────────────┬──────────────────────────┐
 │ Name       │ Value      │ Description              │
@@ -791,6 +800,7 @@ yarngpt info
 ```
 
 Output shows:
+
 - Free tier limits
 - Available features
 - Useful links
@@ -807,11 +817,13 @@ yarngpt version
 ### CLI Examples
 
 **Convert with Nigerian accent:**
+
 ```bash
 yarngpt convert "Welcome to Lagos!" --voice tayo -o lagos.mp3
 ```
 
 **Create multiple greetings:**
+
 ```bash
 cat > greetings.txt << EOF
 Good morning, have a great day!
@@ -824,6 +836,7 @@ yarngpt batch greetings.txt -o greetings --prefix greeting --voice regina
 ```
 
 **High-quality WAV output:**
+
 ```bash
 yarngpt convert "Professional audio message" \
   --voice adam \
@@ -832,6 +845,7 @@ yarngpt convert "Professional audio message" \
 ```
 
 **Quick voice testing:**
+
 ```bash
 # List all voices
 yarngpt voices
